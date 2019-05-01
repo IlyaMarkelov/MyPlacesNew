@@ -26,12 +26,12 @@ class MainViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
 
-        cell.textLabel?.text = fastFood[indexPath.row]
-        cell.imageView?.image = UIImage(named: fastFood[indexPath.row])
-        cell.imageView?.layer.cornerRadius = cell.frame.size.height / 2 // устанавливаем размер ячейки
-        cell.imageView?.clipsToBounds = true // округялем учейки
+        cell.nameLabel.text = fastFood[indexPath.row]
+        cell.imageOfPlace.image = UIImage(named: fastFood[indexPath.row])
+        cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 // устанавливаем размер ячейки
+        cell.imageOfPlace.clipsToBounds = true // округялем учейки
 
         return cell
     }

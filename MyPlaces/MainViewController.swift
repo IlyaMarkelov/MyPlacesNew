@@ -10,36 +10,35 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-    let fastFood = ["Балкан Гриль", "Бочка", "Вкусные истории", "Дастархан", "Индокитай", "Классик", "Шок", "Bonsai", "Burger Heroes", "Kitchen", "Love&Life", "Morris Pub", "Sherlock Holmes"]
     
+    
+    var places = Place.getPlaces()
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }
 
     // MARK: - Table view data source
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return fastFood.count
+        return places.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
 
-        cell.nameLabel.text = fastFood[indexPath.row]
-        cell.imageOfPlace.image = UIImage(named: fastFood[indexPath.row])
+        cell.nameLabel.text = places[indexPath.row].name
+        cell.locationLabel.text = places[indexPath.row].location
+        cell.typeLabel.text = places[indexPath.row].type
+        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].name)
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 // устанавливаем размер ячейки
         cell.imageOfPlace.clipsToBounds = true // округялем учейки
 
         return cell
     }
     
-    //MARK: - Table view delegate
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
-    }
+   
     
 
     /*

@@ -10,7 +10,7 @@ import UIKit
 
 class MainViewController: UITableViewController {
 
-    let fastFood = ["KFC", "burger king", "MCDonalds", "Black star burgers", "Фарш"]
+    let fastFood = ["Балкан Гриль", "Бочка", "Вкусные истории", "Дастархан", "Индокитай", "Классик", "Шок", "Bonsai", "Burger Heroes", "Kitchen", "Love&Life", "Morris Pub", "Sherlock Holmes"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +30,15 @@ class MainViewController: UITableViewController {
 
         cell.textLabel?.text = fastFood[indexPath.row]
         cell.imageView?.image = UIImage(named: fastFood[indexPath.row])
+        cell.imageView?.layer.cornerRadius = cell.frame.size.height / 2 // устанавливаем размер ячейки
+        cell.imageView?.clipsToBounds = true // округялем учейки
 
         return cell
+    }
+    
+    //MARK: - Table view delegate
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 85
     }
     
 

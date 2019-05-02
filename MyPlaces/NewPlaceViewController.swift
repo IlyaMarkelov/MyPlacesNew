@@ -10,6 +10,8 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
 
+    @IBOutlet weak var imageOfPlace: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -60,13 +62,22 @@ extension NewPlaceViewController: UITextFieldDelegate {
 }
 
 // MARK: Work with image
-extension NewPlaceViewController {
+extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate /*позволяет определить переходы в стеки view controller'ов, которые открываются при выборе изображений */ {
     func chooseImagePicker(source: UIImagePickerController.SourceType) {
         if UIImagePickerController.isSourceTypeAvailable(source) { // проверка на доступность источника выбора изображения
             let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self // делегирование обязанностей по методу imagePickerController
             imagePicker.allowsEditing = true //позволить пользователю редактировать выбранное изображение
             imagePicker.sourceType = source // определяем тип источника выбора изображения
             present(imagePicker, animated: true) // отображение на экране
         }
+    }
+    
+    // Позволяет использовать отредактированное пользователем изображение
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        imageOfPlace.image = info[.editedImage] as? UIImage
+        imageOfPlace.contentMode = .scaleAspectFit // позволяет масштабировать изображение по содержимому UIImage
+        imageOfPlace.clipsToBounds = true //обрезать изображение по границам самого UIImage
+        dismiss(animated: true) // закрыть imagePickerController
     }
 }

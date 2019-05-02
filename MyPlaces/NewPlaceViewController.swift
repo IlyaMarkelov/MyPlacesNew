@@ -9,13 +9,25 @@
 import UIKit
 
 class NewPlaceViewController: UITableViewController {
+    
+    var newPlace: Place?
 
-    @IBOutlet weak var imageOfPlace: UIImageView!
+    var imageIsChanged = false
+    @IBOutlet var saveButton: UIBarButtonItem!
+    
+    @IBOutlet var placeImage: UIImageView!
+    @IBOutlet var placeName: UITextField!
+    @IBOutlet var placeLocation: UITextField!
+    @IBOutlet var placeType: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.tableFooterView = UIView() // заменим разлиновку на обычный view
+        
+        saveButton.isEnabled = false // по умолчанию кнопка save будет отключена
+        
+        placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged) //при редактировании текст. поля name будет срабатывать метод, который будет вызывать метод textFieldChanged
         
     }
     
@@ -56,10 +68,32 @@ class NewPlaceViewController: UITableViewController {
             view.endEditing(true)
         }
     }
+    
+    //Сохранение новой ячейки при добавлении
+    func saveNewPlace() {
+        
+        var image: UIImage?
+        // Если изображение было изменено пользователем, то для свойства image присваиваем значение , которое берем из imageView - placeImage
+        //Иначе присваиваем свое изображение
+        if imageIsChanged {
+            image = placeImage.image
+        } else {
+            image = #imageLiteral(resourceName: "imagePlaceholder")
+        }
+        
+        newPlace = Place(name: placeName.text!,
+                         location: placeLocation.text,
+                         type: placeType.text,
+                         image: image,
+                         resturantImage: nil)
+    }
+    //Закрытие view controller
+    @IBAction func cancelAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: Text field delegate
-
 extension NewPlaceViewController: UITextFieldDelegate {
     
     // Скрываем клавиатуру по нажатию на Done
@@ -67,10 +101,19 @@ extension NewPlaceViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    //(заполнено текстовове поле или нет). Если текст. поле заполнено. то кнопка save будет активна
+    @objc private func textFieldChanged() {
+        if placeName.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
+    }
 }
 
 // MARK: Work with image
 extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate /*позволяет определить переходы в стеки view controller'ов, которые открываются при выборе изображений */ {
+    
     func chooseImagePicker(source: UIImagePickerController.SourceType) {
         if UIImagePickerController.isSourceTypeAvailable(source) { // проверка на доступность источника выбора изображения
             let imagePicker = UIImagePickerController()
@@ -83,9 +126,12 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
     
     // Позволяет использовать отредактированное пользователем изображение
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        imageOfPlace.image = info[.editedImage] as? UIImage
-        imageOfPlace.contentMode = .scaleAspectFit // позволяет масштабировать изображение по содержимому UIImage
-        imageOfPlace.clipsToBounds = true //обрезать изображение по границам самого UIImage
+        placeImage.image = info[.editedImage] as? UIImage
+        placeImage.contentMode = .scaleAspectFit // позволяет масштабировать изображение по содержимому UIImage
+        placeImage.clipsToBounds = true //обрезать изображение по границам самого UIImage
+        
+        imageIsChanged = true
+        
         dismiss(animated: true) // закрыть imagePickerController
     }
 }

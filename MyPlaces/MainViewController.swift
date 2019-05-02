@@ -20,7 +20,6 @@ class MainViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return places.count
     }
 
@@ -28,10 +27,18 @@ class MainViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
 
-        cell.nameLabel.text = places[indexPath.row].name
-        cell.locationLabel.text = places[indexPath.row].location
-        cell.typeLabel.text = places[indexPath.row].type
-        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].name)
+        let place = places[indexPath.row]
+        
+        cell.nameLabel.text = place.name
+        cell.locationLabel.text = place.location
+        cell.typeLabel.text = place.type
+        
+        if place.image == nil {
+            cell.imageOfPlace.image = UIImage(named: place.resturantImage!)
+        } else {
+            cell.imageOfPlace.image = place.image
+        }
+        
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2 // устанавливаем размер ячейки
         cell.imageOfPlace.clipsToBounds = true // округялем учейки
 
@@ -51,8 +58,11 @@ class MainViewController: UITableViewController {
     }
     */
 
-    //функция возврата на предыдущий view controller
-    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {
-        
+    //функция возврата на предыдущий view controller с новой добавленной ячейкой
+    @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
+        guard let newPlaceVC = segue.source as? NewPlaceViewController else {return} // возварт с view controller'a на который переходили ранее
+        newPlaceVC.saveNewPlace()
+        places.append(newPlaceVC.newPlace!)  // добавить объеккт в массив Places
+        tableView.reloadData() // обновляем интерфейс
     }
 }

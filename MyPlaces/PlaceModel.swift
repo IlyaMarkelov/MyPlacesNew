@@ -6,20 +6,21 @@
 //  Copyright © 2019 Илья Маркелов. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Place {
     var name: String
-    var location: String
-    var type: String
-    var image: String
+    var location: String?
+    var type: String?
+    var image: UIImage?
+    var resturantImage: String?
     
     static let fastFood = ["Балкан Гриль", "Бочка", "Вкусные истории", "Дастархан", "Индокитай", "Классик", "Шок", "Bonsai", "Burger Heroes", "Kitchen", "Love&Life", "Morris Pub", "Sherlock Holmes"]
     
     static func getPlaces() -> [Place] {
         var places = [Place]()
         for place in fastFood {
-            places.append(Place(name: place, location: "Москва", type: "Ресторан", image: place))
+            places.append(Place(name: place, location: "Москва", type: "Ресторан", image: nil, resturantImage: place))
         }
         return places
     }

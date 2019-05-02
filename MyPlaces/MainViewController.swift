@@ -51,4 +51,8 @@ class MainViewController: UITableViewController {
     }
     */
 
+    //функция возврата на предыдущий view controller
+    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {
+        
+    }
 }

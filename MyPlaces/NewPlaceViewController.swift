@@ -26,16 +26,24 @@ class NewPlaceViewController: UITableViewController {
                                 //мы должны вызвать меню,
                                 //чтобы пользователь выбрал изображение,
                                 //а иначе мы должны скрыть клавиатуру
+            let cameraIcon = #imageLiteral(resourceName: "camera") // создание иконки камера
+            let photoIcon = #imageLiteral(resourceName: "photo") // создание иконки фото
+            
             let actionSheet = UIAlertController(title: nil, // окно при добавлении нового изображения
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
             let camera = UIAlertAction(title: "Camera", style: .default) { _ in
                 self.chooseImagePicker(source: .camera)
             }
+            camera.setValue(cameraIcon, forKey: "image")// добавление иконки камеры в меню
+            camera.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment") // перенос текста к левому краю
             
             let photo = UIAlertAction(title: "Photo", style: .default) { _ in
                 self.chooseImagePicker(source: .photoLibrary)
             }
+            photo.setValue(photoIcon, forKey: "image") // добавление иконки фото в меню
+            photo.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment") // перенос текста к левому краю
+            
             
             let cancel = UIAlertAction(title: "Cancel", style: .cancel)
             

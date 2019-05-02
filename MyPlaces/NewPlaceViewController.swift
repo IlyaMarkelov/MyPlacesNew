@@ -10,9 +10,10 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    var newPlace: Place?
+    var newPlace = Place()
 
     var imageIsChanged = false
+    
     @IBOutlet var saveButton: UIBarButtonItem!
     
     @IBOutlet var placeImage: UIImageView!
@@ -22,6 +23,10 @@ class NewPlaceViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // можно получать доступ к объекту сразу, как он появляется в базе (улучшает скорость к базе)
+        DispatchQueue.main.async {
+            self.newPlace.savePlaces()
+        }
 
         tableView.tableFooterView = UIView() // заменим разлиновку на обычный view
         
@@ -81,11 +86,11 @@ class NewPlaceViewController: UITableViewController {
             image = #imageLiteral(resourceName: "imagePlaceholder")
         }
         
-        newPlace = Place(name: placeName.text!,
-                         location: placeLocation.text,
-                         type: placeType.text,
-                         image: image,
-                         resturantImage: nil)
+//        newPlace = Place(name: placeName.text!,
+//                         location: placeLocation.text,
+//                         type: placeType.text,
+//                         image: image,
+//                         resturantImage: nil)
     }
     //Закрытие view controller
     @IBAction func cancelAction(_ sender: Any) {

@@ -15,7 +15,6 @@ class NewPlaceViewController: UITableViewController {
 
         tableView.tableFooterView = UIView() // заменим разлиновку на обычный view
         
-        
     }
     
     // MARK: Table view delegate
@@ -25,6 +24,24 @@ class NewPlaceViewController: UITableViewController {
                                 //мы должны вызвать меню,
                                 //чтобы пользователь выбрал изображение,
                                 //а иначе мы должны скрыть клавиатуру
+            let actionSheet = UIAlertController(title: nil, // окно при добавлении нового изображения
+                                                message: nil,
+                                                preferredStyle: .actionSheet)
+            let camera = UIAlertAction(title: "Camera", style: .default) { _ in
+                self.chooseImagePicker(source: .camera)
+            }
+            
+            let photo = UIAlertAction(title: "Photo", style: .default) { _ in
+                self.chooseImagePicker(source: .photoLibrary)
+            }
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+            
+            actionSheet.addAction(camera)
+            actionSheet.addAction(photo)
+            actionSheet.addAction(cancel)
+            
+            present(actionSheet, animated: true)
         } else {
             view.endEditing(true)
         }
@@ -39,5 +56,17 @@ extension NewPlaceViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+// MARK: Work with image
+extension NewPlaceViewController {
+    func chooseImagePicker(source: UIImagePickerController.SourceType) {
+        if UIImagePickerController.isSourceTypeAvailable(source) { // проверка на доступность источника выбора изображения
+            let imagePicker = UIImagePickerController()
+            imagePicker.allowsEditing = true //позволить пользователю редактировать выбранное изображение
+            imagePicker.sourceType = source // определяем тип источника выбора изображения
+            present(imagePicker, animated: true) // отображение на экране
+        }
     }
 }

@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-let realm = try! Realm() // Создание кземпляра Realm
+let realm = try! Realm() // Создание экземпляра Realm
 
 //сохранение в БД
 class  StorageManager {

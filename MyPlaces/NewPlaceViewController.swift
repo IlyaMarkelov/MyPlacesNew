@@ -10,8 +10,6 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    var newPlace = Place()
-
     var imageIsChanged = false
     
     @IBOutlet var saveButton: UIBarButtonItem!
@@ -23,13 +21,7 @@ class NewPlaceViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // можно получать доступ к объекту сразу, как он появляется в базе (улучшает скорость к базе)
-        DispatchQueue.main.async {
-            self.newPlace.savePlaces()
-        }
-
         tableView.tableFooterView = UIView() // заменим разлиновку на обычный view
-        
         saveButton.isEnabled = false // по умолчанию кнопка save будет отключена
         
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged) //при редактировании текст. поля name будет срабатывать метод, который будет вызывать метод textFieldChanged
@@ -77,6 +69,7 @@ class NewPlaceViewController: UITableViewController {
     //Сохранение новой ячейки при добавлении
     func saveNewPlace() {
         
+        
         var image: UIImage?
         // Если изображение было изменено пользователем, то для свойства image присваиваем значение , которое берем из imageView - placeImage
         //Иначе присваиваем свое изображение
@@ -86,11 +79,16 @@ class NewPlaceViewController: UITableViewController {
             image = #imageLiteral(resourceName: "imagePlaceholder")
         }
         
-//        newPlace = Place(name: placeName.text!,
-//                         location: placeLocation.text,
-//                         type: placeType.text,
-//                         image: image,
-//                         resturantImage: nil)
+        //вспомогательное свойство
+        let imageData = image?.pngData() //конвертирование в тип Data
+        
+        //присваивание значений всем свойствам экземплярам нашей модели
+        let newPlace = Place(name: placeName.text!,
+                              location: placeLocation.text,
+                              type: placeType.text,
+                              imageData: imageData)
+        //Сохранение в БД
+        StorageManager.saveObject(newPlace)
     }
     //Закрытие view controller
     @IBAction func cancelAction(_ sender: Any) {

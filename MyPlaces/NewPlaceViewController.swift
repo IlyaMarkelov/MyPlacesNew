@@ -10,6 +10,7 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
+    var currentPlace: Place? //свойство для передачи объекта типо Place
     var imageIsChanged = false
     
     @IBOutlet var saveButton: UIBarButtonItem!
@@ -25,6 +26,7 @@ class NewPlaceViewController: UITableViewController {
         saveButton.isEnabled = false // по умолчанию кнопка save будет отключена
         
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged) //при редактировании текст. поля name будет срабатывать метод, который будет вызывать метод textFieldChanged
+        setupEditScreen()
         
     }
     
@@ -67,7 +69,7 @@ class NewPlaceViewController: UITableViewController {
     }
     
     //Сохранение новой ячейки при добавлении
-    func saveNewPlace() {
+    func savePlace() {
         
         
         var image: UIImage?
@@ -87,9 +89,47 @@ class NewPlaceViewController: UITableViewController {
                               location: placeLocation.text,
                               type: placeType.text,
                               imageData: imageData)
-        //Сохранение в БД
-        StorageManager.saveObject(newPlace)
+        
+        // меняем старое значение currentPlace на новое
+        if currentPlace != nil {
+            try!  realm.write {
+                currentPlace?.name = newPlace.name
+                currentPlace?.location = newPlace.location
+                currentPlace?.type = newPlace.type
+                currentPlace?.imageData = newPlace.imageData
+            }
+        } else {
+            //Сохранение в БД
+            StorageManager.saveObject(newPlace)
+        }
     }
+    
+    //редактирование записи
+    private func setupEditScreen() {
+        if currentPlace != nil {
+            
+            setupNavigationBar()
+            imageIsChanged = true // изображение не меняется но фоновое в том случае, если мы редактируем запись
+            
+            guard let data = currentPlace?.imageData, let image = UIImage(data: data) else {return}
+            placeImage.image = image
+            placeImage.contentMode = .scaleAspectFill //позволяет масштабировать изображение по содержимому ImageView
+            placeName.text = currentPlace?.name
+            placeLocation.text = currentPlace?.location
+            placeType.text = currentPlace?.type
+        }
+    }
+    
+    //navigation bar для экрана редактирования
+    private func setupNavigationBar() {
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        } //изменить кнопку возврата
+        navigationItem.leftBarButtonItem = nil //убрать кнопку cancel
+        title = currentPlace?.name //в заголовок передать текущее название заведения
+        saveButton.isEnabled = true // кнопка save всегда доступна
+    }
+    
     //Закрытие view controller
     @IBAction func cancelAction(_ sender: Any) {
         dismiss(animated: true, completion: nil)

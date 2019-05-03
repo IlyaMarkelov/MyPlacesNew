@@ -42,6 +42,17 @@ class MainViewController: UITableViewController {
     }
     
    
+    // MARK: Table view delegate
+    //метод, позволяющий вызывать различные пункты меню свайпом по ячейке справо - налево
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+       let place = places[indexPath.row] //объект для удаления
+        //действия при свайпе
+       let deleteAction  = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
+            StorageManager.deleteObject(place)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        return [deleteAction]
+    }
     
 
     /*

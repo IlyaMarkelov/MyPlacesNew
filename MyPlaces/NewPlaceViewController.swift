@@ -25,7 +25,8 @@ class NewPlaceViewController: UITableViewController {
         tableView.tableFooterView = UIView() // заменим разлиновку на обычный view
         saveButton.isEnabled = false // по умолчанию кнопка save будет отключена
         
-        placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged) //при редактировании текст. поля name будет срабатывать метод, который будет вызывать метод textFieldChanged
+        //при редактировании текст. поля name будет срабатывать метод, который будет вызывать метод textFieldChanged
+        placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         setupEditScreen()
         
     }
@@ -70,7 +71,6 @@ class NewPlaceViewController: UITableViewController {
     
     //Сохранение новой ячейки при добавлении
     func savePlace() {
-        
         
         var image: UIImage?
         // Если изображение было изменено пользователем, то для свойства image присваиваем значение , которое берем из imageView - placeImage
@@ -155,7 +155,8 @@ extension NewPlaceViewController: UITextFieldDelegate {
 }
 
 // MARK: Work with image
-extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate /*позволяет определить переходы в стеки view controller'ов, которые открываются при выборе изображений */ {
+//позволяет определить переходы в стеки view controller'ов, которые открываются при выборе изображений
+extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
     
     func chooseImagePicker(source: UIImagePickerController.SourceType) {
         if UIImagePickerController.isSourceTypeAvailable(source) { // проверка на доступность источника выбора изображения

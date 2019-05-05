@@ -12,8 +12,14 @@ import RealmSwift
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var segmentedControl: UISegmentedControl!
+    @IBOutlet var reversedSortingButton: UIBarButtonItem!
     // Results - автообновляемый тип контейнера, который возвращает запрашиваемые объекты. Результаты всегда отображают  текущее состояние хранилище в текущем потоке, в том числе и во время записей транзакций. Объект Results позволяет работать с данными в реальном времени. Мы можем одновременнно записывать в него данные и тут же их считывать
     var places: Results<Place>!
+    
+    //сортировка по возрастанию
+    var ascendingSorting = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // отображение объектов на интерфейсе
@@ -75,5 +81,32 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         newPlaceVC.savePlace()
         tableView.reloadData() // обновляем интерфейс
+    }
+    @IBAction func sortSelection(_ sender: UISegmentedControl) {
+        sorting()
+    }
+    @IBAction func reversedSotring(_ sender: Any) {
+        // toggle - менфет значение на противоположное
+        ascendingSorting.toggle()
+        //поменять изображение для кнопки
+        //Если сортировка по возрастанию, то для кнопки reverseSortingButton мы будем использовать изображение со стрелками вниз
+        // а иначе будем выбирать изображение со стрелками вверх
+        if ascendingSorting {
+            reversedSortingButton.image = #imageLiteral(resourceName: "AZ")
+        } else {
+            reversedSortingButton.image = #imageLiteral(resourceName: "ZA")
+        }
+        sorting()
+    }
+    
+    private func sorting() {
+        //Если выбранный индекс сегмента равен 0, то сортируем массив places по ключу date
+        if segmentedControl.selectedSegmentIndex == 0 {
+            places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
+        } else {
+            places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
+        }
+        // Обновление таблицы
+        tableView.reloadData()
     }
 }

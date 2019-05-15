@@ -16,11 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        let schemaVersion: UInt64 = 2
+        
         //Создаем новую конфигурацию
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 1,
+            schemaVersion: schemaVersion,
             
             //Устанавливается замыкание, которое будет вызвано автоматически при обращении к базе
             migrationBlock: { migration, oldSchemaVersion in

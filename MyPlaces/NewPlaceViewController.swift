@@ -10,7 +10,7 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    var currentPlace: Place? //свойство для передачи объекта типо Place
+    var currentPlace: Place! //свойство для передачи объекта типо Place
     var imageIsChanged = false
     
     @IBOutlet var saveButton: UIBarButtonItem!
@@ -19,6 +19,7 @@ class NewPlaceViewController: UITableViewController {
     @IBOutlet var placeName: UITextField!
     @IBOutlet var placeLocation: UITextField!
     @IBOutlet var placeType: UITextField!
+    @IBOutlet var ratimgControl: RatingControll!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +94,8 @@ class NewPlaceViewController: UITableViewController {
         let newPlace = Place(name: placeName.text!,
                               location: placeLocation.text,
                               type: placeType.text,
-                              imageData: imageData)
+                              imageData: imageData,
+                              rating: Double(ratimgControl.rating))
         
         // меняем старое значение currentPlace на новое
         if currentPlace != nil {
@@ -102,6 +104,7 @@ class NewPlaceViewController: UITableViewController {
                 currentPlace?.location = newPlace.location
                 currentPlace?.type = newPlace.type
                 currentPlace?.imageData = newPlace.imageData
+                currentPlace?.rating = newPlace.rating
             }
         } else {
             //Сохранение в БД
@@ -122,6 +125,7 @@ class NewPlaceViewController: UITableViewController {
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
+            ratimgControl.rating = Int(currentPlace.rating)
         }
     }
     

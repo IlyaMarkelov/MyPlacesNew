@@ -22,7 +22,12 @@ class NewPlaceViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.tableFooterView = UIView() // заменим разлиновку на обычный view
+        
+        // заменим разлиновку на обычный view
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0,
+                                                      y: 0,
+                                                      width: tableView.frame.size.width,
+                                                      height: 1))
         saveButton.isEnabled = false // по умолчанию кнопка save будет отключена
         
         //при редактировании текст. поля name будет срабатывать метод, который будет вызывать метод textFieldChanged

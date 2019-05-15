@@ -11,6 +11,7 @@ import RealmSwift
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    
     // Передавая в параметры nil мы сообщаем контроллеру поиска, что для отображения разультата поиска хотим использовать тот же вью, в котором отображается основной контент
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -95,6 +96,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
    
     // MARK: Table view delegate
+    
+    // Выбранная ячейка не останется выделенной после тапа по ней
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     //метод, позволяющий вызывать различные пункты меню свайпом по ячейке справо - налево
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
        let place = places[indexPath.row] //объект для удаления
